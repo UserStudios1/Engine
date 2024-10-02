@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 #include "Shader/Shader.h"
@@ -43,13 +46,11 @@ int main() {
 	std::cout << "Initialization done.\n" << std::endl;
 
 	float vertices[] = {
-		/*-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f*/
-		 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
-		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f
+		// position          // texture
+		 0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f,  0.0f, 1.0f
 	};
 	unsigned int indices[]{
 		0, 1, 3,
@@ -64,7 +65,6 @@ int main() {
 	VAO.Bind();
 	VAO.Link1(VBO, 0);
 	VAO.Link2(VBO, 1);
-	VAO.Link3(VBO, 2);
 
 	VAO.Unbind();
 	VBO.Unbind();
@@ -86,6 +86,8 @@ int main() {
 	Shader.setIntU1("texture1", 0);
 	Shader.setIntU1("texture2", 1);
 
+	
+
 	std::cout << "\nStarting Render Loop." << std::endl;
 
 	while (!glfwWindowShouldClose(window)) {
@@ -100,9 +102,14 @@ int main() {
 		Texture2.Activate(GL_TEXTURE1);
 
 		Shader.use();
+		// transformation shit
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		/*VAO.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);*/
+		unsigned int transformLoc = glGetUniformLocation(Shader.ID, "transform");
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
 		VAO.Bind();
 		EBO.Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

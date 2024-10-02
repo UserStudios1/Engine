@@ -78,51 +78,51 @@ void Shader::Delete() {
 	glDeleteProgram(ID);
 }
 
-void Shader::setBoolU1(const std::string& name, bool value) const
+void Shader::setBool(const std::string& name, bool value) const
 {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
-void Shader::setIntU1(const std::string& name, int value) const
+void Shader::setInt(const std::string& name, int value) const
 {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
-void Shader::setFloatU1(const std::string& name, float value) const
+void Shader::setFloat(const std::string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
-void Shader::setBoolU2(const std::string& name, bool value1, bool value2) const
+void Shader::setVec2(const std::string& name, const glm::vec2& value) const
 {
-	glUniform2i(glGetUniformLocation(ID, name.c_str()), (int)value1, (int)value2);
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void Shader::setIntU2(const std::string& name, int value1, int value2) const
+void Shader::setVec2(const std::string& name, float x, float y) const
 {
-	glUniform2i(glGetUniformLocation(ID, name.c_str()), value1, value2);
+	glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
 }
-void Shader::setFloatU2(const std::string& name, float value1, float value2) const
+void Shader::setVec3(const std::string& name, const glm::vec3& value) const
 {
-	glUniform2f(glGetUniformLocation(ID, name.c_str()), value1, value2);
+	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void Shader::setBoolU3(const std::string& name, bool value1, bool value2, bool value3) const
+void Shader::setVec3(const std::string& name, float x, float y, float z) const
 {
-	glUniform3i(glGetUniformLocation(ID, name.c_str()), (int)value1, (int)value2, (int)value3);
+	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
-void Shader::setIntU3(const std::string& name, int value1, int value2, int value3) const
+void Shader::setVec4(const std::string& name, const glm::vec4& value) const
 {
-	glUniform3i(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
+	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void Shader::setFloatU3(const std::string& name, float value1, float value2, float value3) const
+void Shader::setVec4(const std::string& name, float x, float y, float z, float w) const
 {
-	glUniform3f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
 }
-void Shader::setBoolU4(const std::string& name, bool value1, bool value2, bool value3, bool value4) const
+void Shader::setMat2(const std::string& name, const glm::mat2& mat) const
 {
-	glUniform4i(glGetUniformLocation(ID, name.c_str()), (int)value1, (int)value2, (int)value3, (int)value4);
+	glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
-void Shader::setIntU4(const std::string& name, int value1, int value2, int value3, int value4) const
+void Shader::setMat3(const std::string& name, const glm::mat3& mat) const
 {
-	glUniform4i(glGetUniformLocation(ID, name.c_str()), value1, value2, value3, value4);
+	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
-void Shader::setFloatU4(const std::string& name, float value1, float value2, float value3, float value4) const
+void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
 {
-	glUniform4f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3, value4);
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }

@@ -11,10 +11,8 @@ public:
 
 	VAO();
 
-	void Link(VBO& VBO, GLuint index);
 	void Link1(VBO& VBO, GLuint index);
 	void Link2(VBO& VBO, GLuint index);
-	void Link3(VBO& VBO, GLuint index);
 	void Bind();
 	void Unbind();
 	void Delete();
