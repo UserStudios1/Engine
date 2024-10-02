@@ -83,8 +83,8 @@ int main() {
 	Texture2.LoadRGBA("awesomeface.png");
 
 	Shader.use();
-	Shader.setIntU1("texture1", 0);
-	Shader.setIntU1("texture2", 1);
+	Shader.setInt("texture1", 0);
+	Shader.setInt("texture2", 1);
 
 	
 
