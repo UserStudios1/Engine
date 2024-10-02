@@ -109,7 +109,6 @@ int main() {
 		// WIREFRAME MODE
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-
 		// swap buffers and poll events
 		glfwSwapBuffers(window);
 		glfwPollEvents();

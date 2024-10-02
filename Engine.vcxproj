@@ -150,6 +150,8 @@
     <ClInclude Include="Utils\VBO.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="README.md" />
     <None Include="Shader\fragmentShader.f" />
     <None Include="Shader\vertexShader.v" />
   </ItemGroup>
