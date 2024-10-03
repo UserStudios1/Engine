@@ -7,15 +7,15 @@ VAO::VAO() {
 // CONTAINS POSITION LINKING
 void VAO::Link1(VBO& VBO, GLuint index) {
 	VBO.Bind();
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(index);
 	VBO.Unbind();
 }
 
-// CONTAINS TEXTURE LINKING
+// CONTAINS NORMAL LINKING
 void VAO::Link2(VBO& VBO, GLuint index) {
 	VBO.Bind();
-	glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(index);
 	VBO.Unbind();
 }

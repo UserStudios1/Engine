@@ -64,10 +64,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\fragmentShader.f" />
-    <None Include="Shader\vertexShader.v" />
+    <None Include="Shader\cubeFragmentShader.f" />
+    <None Include="Shader\cubeVertexShader.v" />
     <None Include="README.md" />
     <None Include=".gitignore" />
+    <None Include="Shader\lightningVertexShader.v" />
+    <None Include="Shader\lightningFragmentShader.f" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="wooden_container.jpg">
