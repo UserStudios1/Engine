@@ -145,10 +145,15 @@ int main() {
 		lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
 		lightningShader.use();
-		lightningShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		lightningShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		lightningShader.setVec3("lightPos", lightPos);
 		lightningShader.setVec3("viewPos", camera.Position);
+		lightningShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		lightningShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		lightningShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+		lightningShader.setFloat("material.shininess", 32.0f);
+		lightningShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+		lightningShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+		lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 		// transformation shit
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
