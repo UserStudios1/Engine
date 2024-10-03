@@ -5,17 +5,25 @@ VAO::VAO() {
 }
 
 // CONTAINS POSITION LINKING
-void VAO::Link1(VBO& VBO, GLuint index) {
+void VAO::LinkPosition(VBO& VBO, GLuint index) {
 	VBO.Bind();
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(index);
 	VBO.Unbind();
 }
 
 // CONTAINS NORMAL LINKING
-void VAO::Link2(VBO& VBO, GLuint index) {
+void VAO::LinkNormals(VBO& VBO, GLuint index) {
 	VBO.Bind();
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(index);
+	VBO.Unbind();
+}
+
+// CONTAINS TEXTURE LINKING
+void VAO::LinkTexture(VBO& VBO, GLuint index) {
+	VBO.Bind();
+	glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(index);
 	VBO.Unbind();
 }

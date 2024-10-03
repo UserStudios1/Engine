@@ -11,8 +11,9 @@ public:
 
 	VAO();
 
-	void Link1(VBO& VBO, GLuint index);
-	void Link2(VBO& VBO, GLuint index);
+	void LinkPosition(VBO& VBO, GLuint index);
+	void LinkNormals(VBO& VBO, GLuint index);
+	void LinkTexture(VBO& VBO, GLuint index);
 	void Bind();
 	void Unbind();
 	void Delete();
