@@ -13,8 +13,7 @@ public:
 
 	Texture();
 
-	void LoadRGB(const char* fileName);
-	void LoadRGBA(const char* fileName);
+	void Load(const char* fileName);
 	void Flip(bool value);
 	void Activate(GLenum texture);
 };

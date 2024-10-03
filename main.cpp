@@ -130,8 +130,13 @@ int main() {
 	Shader lightningShader("Shader/lightningVertexShader.v", "Shader/lightningFragmentShader.f");
 	Shader cubeShader("Shader/cubeVertexShader.v", "Shader/cubeFragmentShader.f");
 
-	Texture diffuseMap;
-	diffuseMap.LoadRGBA("wooden_container2.png");
+	Texture diffuseMap, specularMap;
+	diffuseMap.Load("wooden_container2.png");
+	specularMap.Load("wooden_container2_specular.png");
+
+	lightningShader.use();
+	lightningShader.setInt("material.diffuse", 0);
+	lightningShader.setInt("material.specular", 1);
 
 	std::cout << "\nStarting Render Loop." << std::endl;
 
@@ -153,13 +158,12 @@ int main() {
 
 		// lightning Shader settings
 		lightningShader.use();
-		lightningShader.setVec3("viewPos", camera.Position);
-		lightningShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-		lightningShader.setFloat("material.shininess", 64.0f);
-		lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		lightningShader.setVec3("light.position", lightPos);
+		lightningShader.setVec3("viewPos", camera.Position);
 		lightningShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightningShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+		lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		lightningShader.setFloat("material.shininess", 64.0f);
 
 		// transformation shit
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -171,6 +175,7 @@ int main() {
 		lightningShader.setMat4("model", model);
 
 		diffuseMap.Activate(GL_TEXTURE0);
+		specularMap.Activate(GL_TEXTURE1);
 
 		// drawing cube
 		cubeVAO.Bind();

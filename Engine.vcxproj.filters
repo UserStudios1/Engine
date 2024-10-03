@@ -81,5 +81,8 @@
     <Image Include="wooden_container2.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="wooden_container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
