@@ -112,24 +112,27 @@ int main() {
 	VAO lightCubeVAO;
 	VBO VBO(vertices, sizeof(vertices));
 
+	// linking cubeVAO buffer to VBO
 	cubeVAO.Bind();
 	cubeVAO.Link1(VBO, 0);
 	cubeVAO.Link2(VBO, 1);
 
 	cubeVAO.Unbind();
-
+	// same with lightCubeVAO
 	lightCubeVAO.Bind();
 	lightCubeVAO.Link1(VBO, 0);
 	
+	// enabling default OpenGL Depth Test
 	glEnable(GL_DEPTH_TEST);
 
-	// shaders
+	// creating Shaders
 	Shader lightningShader("Shader/lightningVertexShader.v", "Shader/lightningFragmentShader.f");
 	Shader cubeShader("Shader/cubeVertexShader.v", "Shader/cubeFragmentShader.f");
 
 	std::cout << "\nStarting Render Loop." << std::endl;
 
 	while (!glfwWindowShouldClose(window)) {
+		// frame rate logic
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -137,13 +140,14 @@ int main() {
 		// input
 		process_input(window);
 
-		// render
+		// render loop
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
 		lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
+		// lightning Shader settings
 		lightningShader.use();
 		lightningShader.setVec3("lightPos", lightPos);
 		lightningShader.setVec3("viewPos", camera.Position);
@@ -164,10 +168,12 @@ int main() {
 		glm::mat4 model = glm::mat4(1.0f);
 		lightningShader.setMat4("model", model);
 
+		// drawing cube
 		cubeVAO.Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		cubeVAO.Unbind();
 
+		// cube shader settings
 		cubeShader.use();
 		cubeShader.setMat4("projection", projection);
 		cubeShader.setMat4("view", view);
@@ -176,6 +182,7 @@ int main() {
 		model = glm::scale(model, glm::vec3(0.2f));
 		cubeShader.setMat4("model", model);
 
+		// drawing light cube (light source)
 		lightCubeVAO.Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
