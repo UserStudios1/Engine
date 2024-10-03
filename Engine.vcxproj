@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Projects\src\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Projects\src\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Projects\Engine\src\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Projects\Engine\src\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
