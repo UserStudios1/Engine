@@ -26,6 +26,8 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 int main() {
 	// GLFW init
 	std::cout << "Starting Initialization." << std::endl;
@@ -163,11 +165,21 @@ int main() {
 
 		// lightning Shader settings
 		lightningShader.use();
-		lightningShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+		// moving around point light
+		/*lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+		lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;*/
+		lightningShader.setVec3("light.position", lightPos);
+		// directional light
+		//lightningShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
 		lightningShader.setVec3("viewPos", camera.Position);
 		lightningShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightningShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		// point Light
+		lightningShader.setFloat("light.constant", 1.0f);
+		lightningShader.setFloat("light.linear", 0.09f);
+		lightningShader.setFloat("light.quadratic", 0.032f);
+
 		lightningShader.setFloat("material.shininess", 32.0f);
 
 		// transformation shit
@@ -197,19 +209,21 @@ int main() {
 			
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+		cubeVAO.Unbind();
 
-		// cube shader settings
-		/*cubeShader.use();
+		// cube shader settings for Point Light
+		cubeShader.use();
 		cubeShader.setMat4("projection", projection);
 		cubeShader.setMat4("view", view);
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
-		cubeShader.setMat4("model", model);*/
+		cubeShader.setMat4("model", model);
 
 		// drawing light cube (light source)
-		/*lightCubeVAO.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 36);*/
+		lightCubeVAO.Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		lightCubeVAO.Unbind();
 
 		// swap buffers and poll events
 		glfwSwapBuffers(window);
