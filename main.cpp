@@ -19,15 +19,12 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
 float lastX = 400.0f;
 float lastY = 300.0f;
 bool firstMouse = true;
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
 
 int main() {
 	// GLFW init
@@ -59,8 +56,14 @@ int main() {
 
 	// set Viewport
 	glViewport(0, 0, 800, 600);
+	// enabling default OpenGL Depth Test
+	glEnable(GL_DEPTH_TEST);
 
 	std::cout << "Initialization done.\n" << std::endl;
+
+	// creating Shaders
+	Shader lightningShader("Shader/lightningVertexShader.v", "Shader/lightningFragmentShader.f");
+	Shader cubeShader("Shader/cubeVertexShader.v", "Shader/cubeFragmentShader.f");
 
 	float vertices[] = {
 		// positions          // normals           // texture coords
@@ -107,6 +110,19 @@ int main() {
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 	};
 
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	// buffers
 	VAO cubeVAO;
 	VAO lightCubeVAO;
@@ -114,21 +130,13 @@ int main() {
 
 	// linking cubeVAO buffer to VBO
 	cubeVAO.Bind();
-	cubeVAO.LinkPosition(VBO, 0);
-	cubeVAO.LinkNormals(VBO, 1);
-	cubeVAO.LinkTexture(VBO, 2);
+	cubeVAO.LinkPosition(0);
+	cubeVAO.LinkNormals(1);
+	cubeVAO.LinkTexture(2);
 
-	cubeVAO.Unbind();
 	// same with lightCubeVAO
 	lightCubeVAO.Bind();
-	lightCubeVAO.LinkPosition(VBO, 0);
-	
-	// enabling default OpenGL Depth Test
-	glEnable(GL_DEPTH_TEST);
-
-	// creating Shaders
-	Shader lightningShader("Shader/lightningVertexShader.v", "Shader/lightningFragmentShader.f");
-	Shader cubeShader("Shader/cubeVertexShader.v", "Shader/cubeFragmentShader.f");
+	lightCubeVAO.LinkPosition(0);	
 
 	Texture diffuseMap, specularMap;
 	diffuseMap.Load("wooden_container2.png");
@@ -153,23 +161,20 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
-		lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
-
 		// lightning Shader settings
 		lightningShader.use();
-		lightningShader.setVec3("light.position", lightPos);
+		lightningShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
 		lightningShader.setVec3("viewPos", camera.Position);
 		lightningShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		lightningShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		lightningShader.setFloat("material.shininess", 64.0f);
+		lightningShader.setFloat("material.shininess", 32.0f);
 
 		// transformation shit
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		lightningShader.setMat4("view", view);
 		lightningShader.setMat4("projection", projection);
+		lightningShader.setMat4("view", view);
 
 		glm::mat4 model = glm::mat4(1.0f);
 		lightningShader.setMat4("model", model);
@@ -178,22 +183,33 @@ int main() {
 		specularMap.Activate(GL_TEXTURE1);
 
 		// drawing cube
+		/*cubeVAO.Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
+
 		cubeVAO.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		cubeVAO.Unbind();
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			lightningShader.setMat4("model", model);
+			
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		// cube shader settings
-		cubeShader.use();
+		/*cubeShader.use();
 		cubeShader.setMat4("projection", projection);
 		cubeShader.setMat4("view", view);
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
-		cubeShader.setMat4("model", model);
+		cubeShader.setMat4("model", model);*/
 
 		// drawing light cube (light source)
-		lightCubeVAO.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		/*lightCubeVAO.Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
 		// swap buffers and poll events
 		glfwSwapBuffers(window);
