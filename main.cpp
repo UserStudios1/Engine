@@ -125,6 +125,13 @@ int main() {
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
+	glm::vec3 pointLightPositions[] = {
+		glm::vec3(0.7f,  0.2f,  2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3(0.0f,  0.0f, -3.0f)
+	};
+
 	// buffers
 	VAO cubeVAO;
 	VAO lightCubeVAO;
@@ -166,21 +173,55 @@ int main() {
 		// lightning Shader settings
 		lightningShader.use();
 		// moving around point light
-		/*lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
-		lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;*/
-		lightningShader.setVec3("light.position", lightPos);
-		// directional light
-		//lightningShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
 		lightningShader.setVec3("viewPos", camera.Position);
-		lightningShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		lightningShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-		lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		// point Light
-		lightningShader.setFloat("light.constant", 1.0f);
-		lightningShader.setFloat("light.linear", 0.09f);
-		lightningShader.setFloat("light.quadratic", 0.032f);
-
 		lightningShader.setFloat("material.shininess", 32.0f);
+		lightningShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		lightningShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		lightningShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		lightningShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+		// point light 1
+		lightningShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		lightningShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		lightningShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		lightningShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		lightningShader.setFloat("pointLights[0].constant", 1.0f);
+		lightningShader.setFloat("pointLights[0].linear", 0.09f);
+		lightningShader.setFloat("pointLights[0].quadratic", 0.032f);
+		// point light 2
+		lightningShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		lightningShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		lightningShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		lightningShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		lightningShader.setFloat("pointLights[1].constant", 1.0f);
+		lightningShader.setFloat("pointLights[1].linear", 0.09f);
+		lightningShader.setFloat("pointLights[1].quadratic", 0.032f);
+		// point light 3
+		lightningShader.setVec3("pointLights[2].position", pointLightPositions[2]);
+		lightningShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		lightningShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+		lightningShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		lightningShader.setFloat("pointLights[2].constant", 1.0f);
+		lightningShader.setFloat("pointLights[2].linear", 0.09f);
+		lightningShader.setFloat("pointLights[2].quadratic", 0.032f);
+		// point light 4
+		lightningShader.setVec3("pointLights[3].position", pointLightPositions[3]);
+		lightningShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		lightningShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+		lightningShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		lightningShader.setFloat("pointLights[3].constant", 1.0f);
+		lightningShader.setFloat("pointLights[3].linear", 0.09f);
+		lightningShader.setFloat("pointLights[3].quadratic", 0.032f);
+		// spotLight
+		lightningShader.setVec3("spotLight.position", camera.Position);
+		lightningShader.setVec3("spotLight.direction", camera.Front);
+		lightningShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		lightningShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		lightningShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		lightningShader.setFloat("spotLight.constant", 1.0f);
+		lightningShader.setFloat("spotLight.linear", 0.09f);
+		lightningShader.setFloat("spotLight.quadratic", 0.032f);
+		lightningShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		lightningShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
 		// transformation shit
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -221,8 +262,18 @@ int main() {
 		cubeShader.setMat4("model", model);
 
 		// drawing light cube (light source)
-		lightCubeVAO.Bind();
+		/*lightCubeVAO.Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		lightCubeVAO.Unbind();*/
+
+		lightCubeVAO.Bind();
+		for (int i = 0; i < 4; i++) {
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.2f));
+			cubeShader.setMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		lightCubeVAO.Unbind();
 
 		// swap buffers and poll events
